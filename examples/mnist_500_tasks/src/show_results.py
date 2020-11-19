@@ -3,7 +3,9 @@ import csv
 import time
 import argparse
 import shutil
-# import matplotlib.pyplot as plt
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
 
 def summary(filepath, result_path):
     with open(filepath, 'r') as f:
@@ -12,6 +14,14 @@ def summary(filepath, result_path):
             csv_write = csv.writer(r)
             for line in csv_read:
                 csv_write.writerow(line)
+
+def draw(file):
+    print("Start Draw")
+    results = np.genfromtxt(file, delimiter=",", names=["LR","ACC"])
+    # pd.read_csv(file)
+    results.plot(results["LR"], results["ACC"])
+    plt.show()
+
 
 def main():
     parser = argparse.ArgumentParser(description='Display Results')
@@ -40,6 +50,8 @@ def main():
         filepath = os.path.join(path, file)
         if os.path.isfile(filepath) and file[-4:]=='.csv':
             summary(filepath, os.path.join(result_path, 'results.csv'))
+
+    draw(os.path.join(result_path, "results.csv"))
 
 
 if __name__ == '__main__':
