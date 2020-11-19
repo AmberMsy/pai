@@ -19,8 +19,9 @@ def draw(file):
     print("Start Draw")
     results = np.genfromtxt(file, delimiter=",", names=["LR","ACC"])
     # pd.read_csv(file)
-    results.plot(results["LR"], results["ACC"])
-    plt.show()
+    plt.plot(results["LR"], results["ACC"])
+    plt.savefig('eva.png')
+    # plt.show()
 
 
 def main():
