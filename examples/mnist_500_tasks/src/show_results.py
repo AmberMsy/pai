@@ -21,6 +21,7 @@ def main():
     path = '.'
     # Waiting for all results
     while(len([lists for lists in os.listdir(path)]) <= args.number):
+        print(len([lists for lists in os.listdir(path)]))
         time.sleep(1)
 
     result_path = './result/'
