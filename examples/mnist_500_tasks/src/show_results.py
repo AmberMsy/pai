@@ -2,6 +2,7 @@ import os
 import csv
 import time
 import argparse
+import shutil
 # import matplotlib.pyplot as plt
 
 def summary(filepath, result_path):
@@ -18,11 +19,18 @@ def main():
                         help='The number of learning rates')
     args = parser.parse_args()
     
-    path = '.'
+    path = './data/'
+    if not os.path.exists(path):
+        os.makedirs(path)
     # Waiting for all results
-    while(len([lists for lists in os.listdir(path)]) <= args.number):
-        print(len([lists for lists in os.listdir(path)]))
+    while(len([lists for lists in os.listdir(path)]) < args.number):
+        for file in os.listdir('.'):
+            if file[-4:]=='.csv':
+                shutil.move(file, os.path.join(path, file))
         time.sleep(1)
+    for file in os.listdir('.'):
+        if file[-4:]=='.csv':
+            shutil.move(file, os.path.join(path, file))
 
     result_path = './result/'
     if not os.path.exists(result_path):
@@ -30,7 +38,7 @@ def main():
 
     for file in os.listdir(path):
         filepath = os.path.join(path, file)
-        if os.path.isfile(filepath) and file[:-4]=='.csv':
+        if os.path.isfile(filepath) and file[-4:]=='.csv':
             summary(filepath, os.path.join(result_path, 'results.csv'))
 
 
