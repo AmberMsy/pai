@@ -1,35 +1,36 @@
-# import matplotlib.pyplot as plt
+import os
+import csv
+import time
 import argparse
+# import matplotlib.pyplot as plt
+
+def summary(filepath, result_path):
+    with open(filepath, 'r') as f:
+        csv_read = csv.reader(f)
+        with open(result_path, 'a') as r:
+            csv_write = csv.writer(r)
+            for line in csv_read:
+                csv_write.writerow(line)
 
 def main():
-    parser = argparse.ArgumentParser(description='Show Results')
-    # parser.add_argument('--batch-size', type=int, default=64, metavar='N',
-    #                     help='input batch size for training (default: 64)')
-    # parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N',
-    #                     help='input batch size for testing (default: 1000)')
-    # parser.add_argument('--epochs', type=int, default=14, metavar='N',
-    #                     help='number of epochs to train (default: 14)')
-    # parser.add_argument('--lr', type=float, default=1.0, metavar='LR',
-    #                     help='learning rate (default: 1.0)')
-    # parser.add_argument('--gamma', type=float, default=0.7, metavar='M',
-    #                     help='Learning rate step gamma (default: 0.7)')
-    # parser.add_argument('--no-cuda', action='store_true', default=False,
-    #                     help='disables CUDA training')
-    # parser.add_argument('--dry-run', action='store_true', default=False,
-    #                     help='quickly check a single pass')
-    # parser.add_argument('--seed', type=int, default=1, metavar='S',
-    #                     help='random seed (default: 1)')
-    # parser.add_argument('--log-interval', type=int, default=10, metavar='N',
-    #                     help='how many batches to wait before logging training status')
-    # parser.add_argument('--save-model', action='store_true', default=False,
-    #                     help='For Saving the current Model')
-    parser.add_argument('--host', default='This is default', 
-                        help='Get taskrole name')
+    parser = argparse.ArgumentParser(description='Display Results')
+    parser.add_argument('--number', type=int, default=500, 
+                        help='The number of learning rates')
     args = parser.parse_args()
-
-    if args.host:
-        print(args.host)
     
+    path = '.'
+    # Waiting for all results
+    while(len([lists for lists in os.listdir(path)]) <= args.number):
+        time.sleep(1)
+
+    result_path = './result/'
+    if not os.path.exists(result_path):
+        os.makedirs(result_path)
+
+    for file in os.listdir(path):
+        filepath = os.path.join(path, file)
+        if os.path.isfile(filepath) and file[:-4]=='.csv':
+            summary(filepath, os.path.join(result_path, 'results.csv'))
 
 
 if __name__ == '__main__':
