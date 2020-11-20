@@ -52,7 +52,7 @@ def main():
         if os.path.isfile(filepath) and file[-4:]=='.csv':
             summary(filepath, os.path.join(result_path, 'results.csv'))
 
-    draw(os.path.join(result_path, "results.csv"))
+    # draw(os.path.join(result_path, "results.csv"))
 
 
 if __name__ == '__main__':
