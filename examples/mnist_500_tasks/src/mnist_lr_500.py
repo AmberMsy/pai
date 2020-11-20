@@ -144,7 +144,6 @@ def main():
         acc = test(model, device, test_loader)
         scheduler.step()
 
-    print("Got: ", acc)
     write_result(args.result_file, lr, acc)
     if args.save_model:
         torch.save(model.state_dict(), "mnist_cnn.pt")
