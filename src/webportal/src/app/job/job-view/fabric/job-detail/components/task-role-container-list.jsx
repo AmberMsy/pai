@@ -195,36 +195,40 @@ export default class TaskRoleContainerList extends React.Component {
 
   logAutoRefresh() {
     const { fullLogUrls, tailLogUrls, logListUrl, logType } = this.state;
-    getContainerLog(tailLogUrls, fullLogUrls, logType)
-      .then(({ text, fullLogLink }) =>
-        this.setState(
-          prevState =>
-            prevState.tailLogUrls[logType] === tailLogUrls[logType] && {
-              monacoProps: { value: text },
-              monacoFooterButton: (
-                <PrimaryButton
-                  text='View Full Log'
-                  target='_blank'
-                  styles={{
-                    rootFocused: [ColorClassNames.white],
-                  }}
-                  href={fullLogLink}
-                />
-              ),
-            },
-        ),
-      )
-      .catch(err => {
-        this.setState(
-          prevState =>
-            prevState.tailLogUrls[logType] === tailLogUrls[logType] && {
-              monacoProps: { value: err.message },
-            },
-        );
-        if (err.message === '403') {
-          this.showContainerTailLog(logListUrl, logType);
-        }
-      });
+    if (!isNil(tailLogUrls) && !isNil(fullLogUrls)) {
+      getContainerLog(tailLogUrls, fullLogUrls, logType)
+        .then(({ text, fullLogLink }) =>
+          this.setState(
+            prevState =>
+              prevState.tailLogUrls[logType] === tailLogUrls[logType] && {
+                monacoProps: { value: text },
+                monacoFooterButton: (
+                  <PrimaryButton
+                    text='View Full Log'
+                    target='_blank'
+                    styles={{
+                      rootFocused: [ColorClassNames.white],
+                    }}
+                    href={fullLogLink}
+                  />
+                ),
+              },
+          ),
+        )
+        .catch(err => {
+          this.setState(
+            prevState =>
+              prevState.tailLogUrls[logType] === tailLogUrls[logType] && {
+                monacoProps: { value: err.message },
+              },
+          );
+          if (err.message === '403') {
+            this.showContainerTailLog(logListUrl, logType);
+          }
+        });
+    } else {
+      this.setState({ monacoProps: { value: 'No Logs' } });
+    }
   }
 
   onDismiss() {
@@ -286,8 +290,12 @@ export default class TaskRoleContainerList extends React.Component {
           {
             monacoProps: { value: 'Loading...' },
             monacoTitle: title,
-            fullLogUrls: this.convertObjectFormat(fullLogUrls),
-            tailLogUrls: this.convertObjectFormat(tailLogUrls),
+            fullLogUrls: !isNil(fullLogUrls)
+              ? this.convertObjectFormat(fullLogUrls)
+              : null,
+            tailLogUrls: !isNil(tailLogUrls)
+              ? this.convertObjectFormat(tailLogUrls)
+              : null,
             logType,
           },
           () => {
