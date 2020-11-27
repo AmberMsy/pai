@@ -33,14 +33,10 @@ def main():
         if file[-4:]=='.csv':
             shutil.move(file, os.path.join(path, file))
 
-    result_path = './result/'
-    if not os.path.exists(result_path):
-        os.makedirs(result_path)
-
     for file in os.listdir(path):
         filepath = os.path.join(path, file)
         if os.path.isfile(filepath) and file[-4:]=='.csv':
-            summary(filepath, os.path.join(result_path, 'results.csv'))
+            summary(filepath, 'results.csv')
 
 
 if __name__ == '__main__':
