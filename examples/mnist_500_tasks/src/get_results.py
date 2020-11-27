@@ -16,9 +16,11 @@ def main():
     parser = argparse.ArgumentParser(description='Display Results')
     parser.add_argument('--number', type=int, default=500, 
                         help='The number of learning rates')
+    parser.add_argument('--data_path', default='./mnist500_result/', 
+                        help='The number of learning rates')
     args = parser.parse_args()
     
-    path = './data/'
+    path = args.data_path
     if not os.path.exists(path):
         os.makedirs(path)
     # Waiting for all results
